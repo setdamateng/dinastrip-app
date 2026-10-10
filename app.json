@@ -1,18 +1,19 @@
 {
   "expo": {
-    "name": "dinastirp-app",
-    "slug": "dinastirp-app",
+    "name": "DinasTrip",
+    "slug": "dinastrip-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "dinastirpapp",
+    "scheme": "dinastripapp",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "id.go.mamujutengah.dinastrip",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#0060B7",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -28,15 +29,25 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "imageWidth": 140,
+          "backgroundColor": "#F4F8FC",
+          "dark": {
+            "backgroundColor": "#0A1626"
+          }
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ba5b97a5-a987-4412-bd52-60581107c8b0"
+      }
     }
   }
 }

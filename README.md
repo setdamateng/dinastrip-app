@@ -54,3 +54,19 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## DinasTrip API
+
+The API and public storage URLs default to the DinasTrip backend. To override
+them for another environment, copy `.env.example` to `.env` and set
+`EXPO_PUBLIC_API_URL` (Laravel `/api` base) and `EXPO_PUBLIC_STORAGE_URL`
+(Laravel public `/storage` base). The TypeScript client in
+`src/services/api.ts` appends the `/v1/...` routes and sends
+`Accept: application/json`; use `getStorageUrl(path)` to resolve stored file
+paths. After changing environment values, restart the Expo development server.
+
+The login verification code is generated on the client to match the supplied
+screen design; it is not an authentication or security control. Enforce any
+real CAPTCHA or verification on the server.
+
+The login screen uses `assets/images/logo.png`.
