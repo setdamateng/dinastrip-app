@@ -9,6 +9,7 @@ type AuthValue = {
   loading: boolean; // true selama memulihkan sesi dari penyimpanan
   signIn: (p: { login: string; password: string; captchaId: string; captcha: string }) => Promise<void>;
   signOut: () => Promise<void>;
+  setUser: (u: User) => void;
 };
 
 const Ctx = createContext<AuthValue | null>(null);
@@ -63,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await clearLocal();
   }, [clearLocal]);
 
-  const value = useMemo(() => ({ user, loading, signIn, signOut }), [user, loading, signIn, signOut]);
+  const value = useMemo(() => ({ user, loading, signIn, signOut, setUser }), [user, loading, signIn, signOut]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

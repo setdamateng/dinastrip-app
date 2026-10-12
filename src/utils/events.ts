@@ -13,3 +13,17 @@ export const sptEvents = {
     };
   },
 };
+
+/** Data master (pegawai/OPD) berubah -> daftar memuat ulang. */
+const masterListeners = new Set<Listener>();
+export const masterEvents = {
+  changed() {
+    masterListeners.forEach((f) => f());
+  },
+  onChanged(f: Listener) {
+    masterListeners.add(f);
+    return () => {
+      masterListeners.delete(f);
+    };
+  },
+};

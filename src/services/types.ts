@@ -16,8 +16,10 @@ export type User = {
   email: string;
   avatar_url: string | null;
   bidang: { id: number; nama: string } | null;
+  skpd?: { id: number; nama: string } | null;
   roles: Role[];
   can_access_laporan: boolean;
+  is_premium?: boolean;
 };
 
 export type SptStatusCode = 'draft' | 'diajukan' | 'terverifikasi' | 'ditolak';

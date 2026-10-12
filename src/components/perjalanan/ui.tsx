@@ -108,6 +108,31 @@ export function ExpandText({ text, lines = 5 }: { text: string; lines?: number }
   );
 }
 
+/** Teks per-baris (enter) → berbutir bernomor, rata kiri-kanan, sama seperti hasil cetak SPT. */
+export function NumberedText({ text, kind }: { text: string; kind: 'untuk' | 'dasar' }) {
+  const { c } = useTheme();
+  const items = text
+    .split(/\r\n|\r|\n/)
+    .map((x) => x.trim().replace(/\s+/g, ' '))
+    .filter(Boolean);
+  const end = (x: string, last: boolean) =>
+    kind === 'dasar' ? (last ? `${x}, maka dengan ini;` : `${x};`) : x.endsWith('.') ? x : `${x}.`;
+  const base = { color: c.text, fontSize: 13, lineHeight: 20, textAlign: 'justify' as const };
+  if (items.length <= 1) {
+    return <Text style={base}>{items[0] ? end(items[0], true) : '-'}</Text>;
+  }
+  return (
+    <View style={{ gap: 6 }}>
+      {items.map((x, i) => (
+        <View key={i} style={{ flexDirection: 'row', gap: 6 }}>
+          <Text style={[base, { width: 22, textAlign: 'right' }]}>{i + 1}.</Text>
+          <Text style={[base, { flex: 1 }]}>{end(x, i === items.length - 1)}</Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 export const Divider = () => {
   const { c } = useTheme();
   return <View style={{ height: 1, backgroundColor: c.border }} />;

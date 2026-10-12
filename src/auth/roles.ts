@@ -19,7 +19,18 @@ export const ROLE_TITLE: Record<RoleKind, string> = {
 
 /** Menu tab bawah per role (sesuai desain Figma). `index` = Beranda. */
 export const TABS: Record<RoleKind, string[]> = {
-  pegawai: ['index', 'perjalanan', 'notifikasi', 'profil'],
+  pegawai: ['index', 'perjalanan', 'rekap', 'profil'],
   admin_opd: ['index', 'verifikasi', 'pegawai', 'profil'],
-  super_admin: ['index', 'perjalanan', 'opd', 'pegawai', 'profil'],
+  super_admin: ['index', 'perjalanan', 'rekap', 'profil'],
+};
+
+/** Menu sidebar (geser dari tepi kiri) per role. Rute-rute ini disembunyikan dari tab bawah. */
+export type SideItem = { key: string; label: string; icon: string; path: string };
+export const SIDE: Record<RoleKind, SideItem[]> = {
+  pegawai: [],
+  admin_opd: [],
+  super_admin: [
+    { key: 'opd', label: 'Data OPD', icon: 'business-outline', path: '/opd' },
+    { key: 'pegawai', label: 'Data Pegawai', icon: 'people-outline', path: '/pegawai' },
+  ],
 };

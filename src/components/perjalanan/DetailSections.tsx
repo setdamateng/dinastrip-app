@@ -1,11 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { Alert, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { HotelInfo, PelaksanaDetail, RincianItem, SptDetail, TiketInfo } from '@/services/types';
 import { useTheme } from '@/theme/ThemeProvider';
 import { daftarKota, jumlahHari, rupiah, tanggal, waktu } from '@/utils/format';
-import { Block, Collapsible, Divider, ExpandText, KV } from './ui';
+import { Block, Collapsible, Divider, ExpandText, KV, NumberedText } from './ui';
 
 type IconName = React.ComponentProps<typeof Ionicons>['name'];
 const pct = (f: number) => `${Math.round(f * 100)}%`;
@@ -13,6 +14,7 @@ const pct = (f: number) => `${Math.round(f * 100)}%`;
 // ------------------------------------------------------------ Data SPT
 export function DataSurat({ d }: { d: SptDetail }) {
   const { c } = useTheme();
+  const router = useRouter();
   const hari = jumlahHari(d.tgl_berangkat, d.tgl_kembali);
   const tujuan = d.tujuan_list?.length ? d.tujuan_list.map((k) => k.nama) : d.tujuan;
 
@@ -23,16 +25,23 @@ export function DataSurat({ d }: { d: SptDetail }) {
           <Text style={{ color: c.muted, fontSize: 13 }}>Tidak ada pelaksana</Text>
         ) : (
           d.pelaksana.map((p, i) => (
-            <View key={p.id} style={s.person}>
+            <Pressable
+              key={p.id}
+              style={s.person}
+              accessibilityRole="button"
+              accessibilityLabel={`Buka SPD ${p.nama}`}
+              onPress={() => router.push({ pathname: '/spd/[id]', params: { id: String(p.id) } } as never)}
+            >
               <Text style={[s.num, { color: c.muted }]}>{i + 1}.</Text>
               <View style={{ flex: 1 }}>
-                <Text style={{ color: c.text, fontSize: 13, fontWeight: '700' }}>{p.nama}</Text>
+                <Text style={{ color: c.link, fontSize: 13, fontWeight: '700' }}>{p.nama}</Text>
                 <Text style={{ color: c.muted, fontSize: 12, lineHeight: 17 }}>
                   {[p.jabatan, p.bidang].filter(Boolean).join(' • ') || '-'}
                 </Text>
                 {p.nip ? <Text style={{ color: c.muted, fontSize: 11 }}>NIP {p.nip}</Text> : null}
               </View>
-            </View>
+              <Ionicons name="chevron-forward" size={18} color={c.muted} />
+            </Pressable>
           ))
         )}
       </Block>
@@ -45,14 +54,14 @@ export function DataSurat({ d }: { d: SptDetail }) {
       <KV label="Alat angkut" value={d.alat_angkut} />
       <Divider />
       {d.untuk ? (
-        <Block label="Uraian surat tugas">
-          <ExpandText text={d.untuk} />
-        </Block>
+        <Collapsible nested title="Uraian surat tugas" meta={d.untuk.split(/\r?\n/)[0]} defaultOpen={false}>
+          <NumberedText text={d.untuk} kind="untuk" />
+        </Collapsible>
       ) : null}
       {d.dasar ? (
-        <Block label="Dasar">
-          <ExpandText text={d.dasar} lines={4} />
-        </Block>
+        <Collapsible nested title="Dasar" meta={d.dasar.split(/\r?\n/)[0]} defaultOpen={false}>
+          <NumberedText text={d.dasar} kind="dasar" />
+        </Collapsible>
       ) : null}
       {d.akun ? (
         <Block label="Beban MAK">
@@ -363,7 +372,7 @@ export function Dokumen({ d }: { d: SptDetail }) {
 }
 
 const s = StyleSheet.create({
-  person: { flexDirection: 'row', gap: 6, marginTop: 2 },
+  person: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 6 },
   num: { fontSize: 13, width: 18 },
   between: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 10 },
   badge: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },

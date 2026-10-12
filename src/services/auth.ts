@@ -56,6 +56,18 @@ export const authService = {
     return (await api.get<User>('/auth/me')).data;
   },
 
+  async updateProfile(p: { name: string; username: string; email: string }): Promise<User> {
+    return (await api.put<User>('/auth/profile', p)).data;
+  },
+
+  async changePassword(p: { current: string; password: string; confirm: string }): Promise<void> {
+    await api.post('/auth/change-password', {
+      current_password: p.current,
+      password: p.password,
+      password_confirmation: p.confirm,
+    });
+  },
+
   async logout(): Promise<void> {
     await api.post('/auth/logout');
   },

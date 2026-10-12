@@ -4,6 +4,7 @@ import React from 'react';
 
 import { useAuth } from '@/auth/AuthProvider';
 import { roleKind, TABS } from '@/auth/roles';
+import { SidebarHost } from '@/components/Sidebar';
 import { useTheme } from '@/theme/ThemeProvider';
 
 type IconName = React.ComponentProps<typeof Ionicons>['name'];
@@ -13,6 +14,7 @@ const ALL: { name: string; title: string; icon: IconName }[] = [
   { name: 'index', title: 'Beranda', icon: 'home-outline' },
   { name: 'perjalanan', title: 'Perjalanan', icon: 'briefcase-outline' },
   { name: 'verifikasi', title: 'Verifikasi', icon: 'clipboard-outline' },
+  { name: 'rekap', title: 'Rekap', icon: 'stats-chart-outline' },
   { name: 'notifikasi', title: 'Notifikasi', icon: 'notifications-outline' },
   { name: 'opd', title: 'OPD', icon: 'business-outline' },
   { name: 'pegawai', title: 'Pegawai', icon: 'people-outline' },
@@ -25,6 +27,7 @@ export default function AppLayout() {
   const visible = TABS[roleKind(user)];
 
   return (
+    <SidebarHost>
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -47,5 +50,6 @@ export default function AppLayout() {
         />
       ))}
     </Tabs>
+    </SidebarHost>
   );
 }

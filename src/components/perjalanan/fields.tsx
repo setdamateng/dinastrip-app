@@ -114,6 +114,16 @@ function Calendar({ value, min, max, onPick }: { value: string; min?: string; ma
     return [...Array(lead).fill(0), ...Array.from({ length: days }, (_, i) => i + 1)];
   }, [ym]);
 
+  const weeks = useMemo(() => {
+    const out: number[][] = [];
+    for (let i = 0; i < cells.length; i += 7) {
+      const w = cells.slice(i, i + 7);
+      while (w.length < 7) w.push(0);
+      out.push(w);
+    }
+    return out;
+  }, [cells]);
+
   const go = (delta: number) =>
     setYm(({ y, m }) => {
       const t = new Date(y, m + delta, 1);
@@ -135,28 +145,35 @@ function Calendar({ value, min, max, onPick }: { value: string; min?: string; ma
           <Ionicons name="chevron-forward" size={20} color={c.link} />
         </Pressable>
       </View>
-      <View style={s.grid}>
-        {HARI.map((h) => (
-          <Text key={h} style={[s.cell, { color: c.muted, fontSize: 11, fontWeight: '700' }]}>
-            {h}
-          </Text>
+      <View>
+        <View style={s.week}>
+          {HARI.map((h) => (
+            <View key={h} style={s.cell}>
+              <Text style={{ color: c.muted, fontSize: 11, fontWeight: '700' }}>{h}</Text>
+            </View>
+          ))}
+        </View>
+        {weeks.map((w, wi) => (
+          <View key={wi} style={s.week}>
+            {w.map((d, i) => {
+              if (!d) return <View key={`e${wi}-${i}`} style={s.cell} />;
+              const v = iso(ym.y, ym.m, d);
+              const off = (!!min && v < min) || (!!max && v > max);
+              const on = v === value;
+              return (
+                <View key={v} style={s.cell}>
+                  <Pressable
+                    disabled={off}
+                    onPress={() => onPick(v)}
+                    style={[s.day, on && { backgroundColor: c.primary }, !on && v === today && { borderWidth: 1, borderColor: c.primary }]}
+                  >
+                    <Text style={{ color: on ? c.onPrimary : off ? c.border : c.text, fontSize: 13, fontWeight: on ? '800' : '500' }}>{d}</Text>
+                  </Pressable>
+                </View>
+              );
+            })}
+          </View>
         ))}
-        {cells.map((d, i) => {
-          if (!d) return <View key={`e${i}`} style={s.cell} />;
-          const v = iso(ym.y, ym.m, d);
-          const off = (!!min && v < min) || (!!max && v > max);
-          const on = v === value;
-          return (
-            <Pressable
-              key={v}
-              disabled={off}
-              onPress={() => onPick(v)}
-              style={[s.cell, s.day, on && { backgroundColor: c.primary }, !on && v === today && { borderWidth: 1, borderColor: c.primary }]}
-            >
-              <Text style={{ color: on ? c.onPrimary : off ? c.border : c.text, fontSize: 13, fontWeight: on ? '800' : '500' }}>{d}</Text>
-            </Pressable>
-          );
-        })}
       </View>
     </View>
   );
@@ -416,7 +433,7 @@ const s = StyleSheet.create({
   search: { flexDirection: 'row', alignItems: 'center', gap: 9, borderWidth: 1, borderRadius: 12, paddingHorizontal: 12 },
   row: { flexDirection: 'row', alignItems: 'center', gap: 10, paddingVertical: 12, paddingHorizontal: 4, borderBottomWidth: StyleSheet.hairlineWidth },
   calHead: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 4 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap' },
-  cell: { width: `${100 / 7}%`, height: 40, textAlign: 'center', alignItems: 'center', justifyContent: 'center' },
-  day: { borderRadius: 20 },
+  week: { flexDirection: 'row' },
+  cell: { flex: 1, height: 42, alignItems: 'center', justifyContent: 'center' },
+  day: { width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center' },
 });

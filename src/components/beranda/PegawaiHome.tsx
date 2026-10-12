@@ -1,8 +1,9 @@
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { Text } from 'react-native';
 
 import { useAuth } from '@/auth/AuthProvider';
-import { BerandaShell, CtaButton, EmptyTrips, LoadState, SectionHeader, soon, Stat, StatRow, SummaryCard, TripCard } from '@/components/beranda-ui';
+import { BerandaShell, CtaButton, EmptyTrips, LoadState, SectionHeader, Stat, StatRow, SummaryCard, TripCard } from '@/components/beranda-ui';
 import { useBeranda } from '@/components/useBeranda';
 import { useTheme } from '@/theme/ThemeProvider';
 import { angka } from '@/utils/format';
@@ -11,6 +12,7 @@ import { angka } from '@/utils/format';
 export function PegawaiHome() {
   const { c } = useTheme();
   const { user } = useAuth();
+  const router = useRouter();
   const d = useBeranda();
   const r = d.ringkasan;
 
@@ -35,7 +37,7 @@ export function PegawaiHome() {
           </StatRow>
         </SummaryCard>
 
-        <CtaButton title="Ajukan Perjalanan" icon="add" onPress={() => soon('Form ajukan perjalanan')} />
+        <CtaButton title="Ajukan Perjalanan" icon="add" onPress={() => router.push('/spt-form')} />
 
         <SectionHeader title={`${d.items.length} Perjalanan terakhir`} toList />
         {d.items.length === 0 ? (

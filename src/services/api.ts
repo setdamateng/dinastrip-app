@@ -26,6 +26,7 @@ let onUnauthorized: (() => void) | null = null;
 export const setToken = (t: string | null) => {
   token = t;
 };
+export const getToken = () => token;
 export const setUnauthorizedHandler = (fn: (() => void) | null) => {
   onUnauthorized = fn;
 };
@@ -97,5 +98,6 @@ export const api = {
   get: <T>(path: string, query?: Query, opts?: Options) => request<T>('GET', path, { ...opts, query }),
   post: <T>(path: string, body?: unknown, opts?: Options) => request<T>('POST', path, { ...opts, body: body ?? {} }),
   put: <T>(path: string, body?: unknown, opts?: Options) => request<T>('PUT', path, { ...opts, body: body ?? {} }),
+  patch: <T>(path: string, body?: unknown, opts?: Options) => request<T>('PATCH', path, { ...opts, body: body ?? {} }),
   del: <T>(path: string, body?: unknown, opts?: Options) => request<T>('DELETE', path, { ...opts, body }),
 };

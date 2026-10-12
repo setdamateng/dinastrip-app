@@ -26,6 +26,17 @@ function Gate() {
           <Stack.Screen name="(app)" />
           <Stack.Screen name="spt/[id]" />
           <Stack.Screen name="spt-form" />
+          <Stack.Screen name="spd/[id]" />
+          <Stack.Screen name="spd-edit/[id]" />
+          <Stack.Screen name="rincian-form" />
+          <Stack.Screen name="laporan-form" />
+          <Stack.Screen name="res/[key]" />
+          <Stack.Screen name="res-form" />
+          <Stack.Screen name="pegawai-form" />
+          <Stack.Screen name="opd-form" />
+          <Stack.Screen name="profil-edit" />
+          <Stack.Screen name="ubah-sandi" />
+          <Stack.Screen name="info" />
         </Stack.Protected>
         <Stack.Protected guard={!user}>
           <Stack.Screen name="login" />

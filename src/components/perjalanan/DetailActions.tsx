@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { bagikanPdf } from '@/services/pdf';
 import { Button } from '@/components/kit';
 import { ApiError } from '@/services/api';
 import { masterService } from '@/services/master';
@@ -114,6 +115,16 @@ export function DetailActions({
   // ---- susun tombol ----
   const more: SheetAction[] = [];
   if (a.can_edit) more.push({ key: 'edit', label: 'Ubah', icon: 'create-outline', onPress: () => router.push({ pathname: '/spt-form', params: { id } }) });
+  const cetak = async (path: string, nama: string) => {
+    try {
+      await bagikanPdf(path, nama);
+    } catch (e) {
+      Alert.alert('Tidak dapat membuka dokumen', e instanceof Error ? e.message : 'Terjadi kesalahan.');
+    }
+  };
+  more.push({ key: 'c1', label: 'Cetak / Bagikan Surat Tugas', icon: 'print-outline', onPress: () => cetak(`spt/${id}/pdf/spt`, `Surat-Tugas-${id}`) });
+  more.push({ key: 'c2', label: 'Cetak / Bagikan Surat Tugas (Lampiran)', icon: 'print-outline', onPress: () => cetak(`spt/${id}/pdf/spt?versi=2`, `Surat-Tugas-Lampiran-${id}`) });
+  more.push({ key: 'c3', label: 'Cetak / Bagikan Rekap Biaya', icon: 'print-outline', onPress: () => cetak(`spt/${id}/pdf/rekap-biaya`, `Rekap-Biaya-${id}`) });
   if (a.can_pindah) more.push({ key: 'pindah', label: 'Pindahkan Surat Tugas', icon: 'arrow-redo-outline', onPress: () => open('pindah') });
   if (a.can_delete) more.push({ key: 'hapus', label: 'Hapus', icon: 'trash-outline', danger: true, onPress: hapus });
 
